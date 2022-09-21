@@ -237,6 +237,7 @@ int __vfs_setxattr_noperm(struct user_namespace *mnt_userns,
 
 	return error;
 }
+EXPORT_SYMBOL_GPL(__vfs_setxattr_noperm);
 
 /**
  * __vfs_setxattr_locked - set an extended attribute while holding the inode
@@ -384,6 +385,7 @@ vfs_getxattr_alloc(struct user_namespace *mnt_userns, struct dentry *dentry,
 	*xattr_value = value;
 	return error;
 }
+EXPORT_SYMBOL_GPL(vfs_getxattr_alloc);
 
 ssize_t
 __vfs_getxattr(struct dentry *dentry, struct inode *inode, const char *name,
@@ -471,6 +473,34 @@ __vfs_removexattr(struct user_namespace *mnt_userns, struct dentry *dentry,
 EXPORT_SYMBOL(__vfs_removexattr);
 
 /**
+ *  __vfs_removexattr_noperm - perform removexattr operation without
+ *  performing permission checks.
+ *
+ *  @dentry - object to perform setxattr on
+ *  @name - xattr name to set
+ *
+ *  returns the result of the internal setxattr or setsecurity operations.
+ *
+ *  This function requires the caller to lock the inode's i_mutex before it
+ *  is executed. It also assumes that the caller will make the appropriate
+ *  permission checks.
+ */
+int
+__vfs_removexattr_noperm(struct user_namespace *mnt_userns,
+			 struct dentry *dentry, const char *name)
+{
+	int error;
+
+	error =__vfs_removexattr(mnt_userns, dentry, name);
+	if (!error) {
+		fsnotify_xattr(dentry);
+		evm_inode_post_removexattr(dentry, name);
+	}
+	return error;
+}
+EXPORT_SYMBOL_GPL(__vfs_removexattr_noperm);
+
+/**
  * __vfs_removexattr_locked - set an extended attribute while holding the inode
  * lock
  *
@@ -500,12 +530,7 @@ __vfs_removexattr_locked(struct user_namespace *mnt_userns,
 	if (error)
 		goto out;
 
-	error = __vfs_removexattr(mnt_userns, dentry, name);
-
-	if (!error) {
-		fsnotify_xattr(dentry);
-		evm_inode_post_removexattr(dentry, name);
-	}
+	error = __vfs_removexattr_noperm(mnt_userns, dentry, name);
 
 out:
 	return error;
@@ -569,7 +594,8 @@ setxattr(struct user_namespace *mnt_userns, struct dentry *d,
 		}
 		if ((strcmp(kname, XATTR_NAME_POSIX_ACL_ACCESS) == 0) ||
 		    (strcmp(kname, XATTR_NAME_POSIX_ACL_DEFAULT) == 0))
-			posix_acl_fix_xattr_from_user(mnt_userns, kvalue, size);
+			posix_acl_fix_xattr_from_user(mnt_userns, d_inode(d),
+						      kvalue, size);
 	}
 
 	error = vfs_setxattr(mnt_userns, d, kname, kvalue, size, flags);
@@ -667,7 +693,8 @@ getxattr(struct user_namespace *mnt_userns, struct dentry *d,
 	if (error > 0) {
 		if ((strcmp(kname, XATTR_NAME_POSIX_ACL_ACCESS) == 0) ||
 		    (strcmp(kname, XATTR_NAME_POSIX_ACL_DEFAULT) == 0))
-			posix_acl_fix_xattr_to_user(mnt_userns, kvalue, error);
+			posix_acl_fix_xattr_to_user(mnt_userns, d_inode(d),
+						    kvalue, error);
 		if (size && copy_to_user(value, kvalue, error))
 			error = -EFAULT;
 	} else if (error == -ERANGE && size >= XATTR_SIZE_MAX) {

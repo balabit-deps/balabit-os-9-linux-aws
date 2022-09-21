@@ -374,6 +374,18 @@ static const struct dmi_system_id acpisleep_dmi_table[] __initconst = {
 		DMI_MATCH(DMI_PRODUCT_NAME, "20GGA00L00"),
 		},
 	},
+	/*
+	 * ASUS B1400CEAE hangs on resume from suspend (see
+	 * https://bugzilla.kernel.org/show_bug.cgi?id=215742).
+	 */
+	{
+	.callback = init_default_s3,
+	.ident = "ASUS B1400CEAE",
+	.matches = {
+		DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+		DMI_MATCH(DMI_PRODUCT_NAME, "ASUS EXPERTBOOK B1400CEAE"),
+		},
+	},
 	{},
 };
 
@@ -767,6 +779,7 @@ bool acpi_s2idle_wake(void)
 			return true;
 		}
 
+		pm_wakeup_clear(acpi_sci_irq);
 		rearm_wake_irq(acpi_sci_irq);
 	}
 
@@ -873,12 +886,7 @@ static inline void acpi_sleep_syscore_init(void) {}
 #ifdef CONFIG_HIBERNATION
 static unsigned long s4_hardware_signature;
 static struct acpi_table_facs *facs;
-static bool nosigcheck;
-
-void __init acpi_no_s4_hw_signature(void)
-{
-	nosigcheck = true;
-}
+int acpi_check_s4_hw_signature = -1; /* Default behaviour is just to warn */
 
 static int acpi_hibernation_begin(pm_message_t stage)
 {
@@ -1005,12 +1013,28 @@ static void acpi_sleep_hibernate_setup(void)
 	hibernation_set_ops(old_suspend_ordering ?
 			&acpi_hibernation_ops_old : &acpi_hibernation_ops);
 	sleep_states[ACPI_STATE_S4] = 1;
-	if (nosigcheck)
+	if (!acpi_check_s4_hw_signature)
 		return;
 
 	acpi_get_table(ACPI_SIG_FACS, 1, (struct acpi_table_header **)&facs);
-	if (facs)
+	if (facs) {
+		/*
+		 * s4_hardware_signature is the local variable which is just
+		 * used to warn about mismatch after we're attempting to
+		 * resume (in violation of the ACPI specification.)
+		 */
 		s4_hardware_signature = facs->hardware_signature;
+
+		if (acpi_check_s4_hw_signature > 0) {
+			/*
+			 * If we're actually obeying the ACPI specification
+			 * then the signature is written out as part of the
+			 * swsusp header, in order to allow the boot kernel
+			 * to gracefully decline to resume.
+			 */
+			swsusp_hardware_signature = facs->hardware_signature;
+		}
+	}
 }
 #else /* !CONFIG_HIBERNATION */
 static inline void acpi_sleep_hibernate_setup(void) {}

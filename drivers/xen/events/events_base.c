@@ -66,6 +66,10 @@
 #include <xen/xenbus.h>
 #include <asm/hw_irq.h>
 
+#ifdef CONFIG_ACPI
+#include <linux/acpi.h>
+#endif
+
 #include "events_internal.h"
 
 #undef MODULE_PARAM_PREFIX
@@ -538,6 +542,14 @@ static void bind_evtchn_to_cpu(evtchn_port_t evtchn, unsigned int cpu,
 	channels_on_cpu_dec(info);
 	info->cpu = cpu;
 	channels_on_cpu_inc(info);
+}
+
+static void xen_evtchn_mask_all(void)
+{
+	evtchn_port_t evtchn;
+
+	for (evtchn = 0; evtchn < xen_evtchn_nr_channels(); evtchn++)
+		mask_evtchn(evtchn);
 }
 
 /**
@@ -1250,6 +1262,12 @@ int bind_evtchn_to_irq(evtchn_port_t evtchn)
 	return bind_evtchn_to_irq_chip(evtchn, &xen_dynamic_chip, NULL);
 }
 EXPORT_SYMBOL_GPL(bind_evtchn_to_irq);
+
+int bind_evtchn_to_irq_lateeoi(evtchn_port_t evtchn)
+{
+	return bind_evtchn_to_irq_chip(evtchn, &xen_lateeoi_chip, NULL);
+}
+EXPORT_SYMBOL_GPL(bind_evtchn_to_irq_lateeoi);
 
 static int bind_ipi_to_irq(unsigned int ipi, unsigned int cpu)
 {
@@ -2098,6 +2116,7 @@ void xen_irq_resume(void)
 	struct irq_info *info;
 
 	/* New event-channel space is not 'live' yet. */
+	xen_evtchn_mask_all();
 	xen_evtchn_resume();
 
 	/* No IRQ <-> event-channel mappings. */
@@ -2116,6 +2135,19 @@ void xen_irq_resume(void)
 	}
 
 	restore_pirqs();
+}
+
+void xen_shutdown_pirqs(void)
+{
+	struct irq_info *info;
+
+	list_for_each_entry(info, &xen_irq_list_head, list) {
+		if (info->type != IRQT_PIRQ || !VALID_EVTCHN(info->evtchn))
+			continue;
+
+		shutdown_pirq(irq_get_irq_data(info->irq));
+		irq_state_clr_started(irq_to_desc(info->irq));
+	}
 }
 
 static struct irq_chip xen_dynamic_chip __read_mostly = {
@@ -2235,7 +2267,6 @@ static int xen_evtchn_cpu_dead(unsigned int cpu)
 void __init xen_init_IRQ(void)
 {
 	int ret = -EINVAL;
-	evtchn_port_t evtchn;
 
 	if (xen_fifo_events)
 		ret = xen_evtchn_fifo_init();
@@ -2255,8 +2286,7 @@ void __init xen_init_IRQ(void)
 	BUG_ON(!evtchn_to_irq);
 
 	/* No event channels are 'live' right now. */
-	for (evtchn = 0; evtchn < xen_evtchn_nr_channels(); evtchn++)
-		mask_evtchn(evtchn);
+	xen_evtchn_mask_all();
 
 	pirq_needs_eoi = pirq_needs_eoi_flag;
 

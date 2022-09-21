@@ -50,6 +50,7 @@
 #include <linux/io.h>
 #include <linux/slab.h>
 #include <linux/module.h>
+#include <linux/suspend.h>
 
 #include <asm/page.h>
 #include <asm/xen/hypervisor.h>
@@ -663,26 +664,47 @@ int xenbus_dev_suspend(struct device *dev)
 	struct xenbus_driver *drv;
 	struct xenbus_device *xdev
 		= container_of(dev, struct xenbus_device, dev);
+	int (*cb)(struct xenbus_device *) = NULL;
+	bool xen_suspend = xen_suspend_mode_is_xen_suspend();
 
 	DPRINTK("%s", xdev->nodename);
 
 	if (dev->driver == NULL)
 		return 0;
 	drv = to_xenbus_driver(dev->driver);
-	if (drv->suspend)
-		err = drv->suspend(xdev);
-	if (err)
-		dev_warn(dev, "suspend failed: %i\n", err);
+
+	if (xen_suspend)
+		cb = drv->suspend;
+	else
+		cb = drv->freeze;
+
+	if (cb)
+		err = cb(xdev);
+
+	if (err) {
+		dev_warn(dev, "%s failed: %i\n", xen_suspend ?
+			"suspend" : "freeze", err);
+		return err;
+	}
+
+	if (!xen_suspend) {
+		/* Forget otherend since this can become stale after restore */
+		free_otherend_watch(xdev);
+		free_otherend_details(xdev);
+	}
+
 	return 0;
 }
 EXPORT_SYMBOL_GPL(xenbus_dev_suspend);
 
 int xenbus_dev_resume(struct device *dev)
 {
-	int err;
+	int err = 0;
 	struct xenbus_driver *drv;
 	struct xenbus_device *xdev
 		= container_of(dev, struct xenbus_device, dev);
+	int (*cb)(struct xenbus_device *) = NULL;
+	bool xen_suspend = xen_suspend_mode_is_xen_suspend();
 
 	DPRINTK("%s", xdev->nodename);
 
@@ -691,23 +713,32 @@ int xenbus_dev_resume(struct device *dev)
 	drv = to_xenbus_driver(dev->driver);
 	err = talk_to_otherend(xdev);
 	if (err) {
-		dev_warn(dev, "resume (talk_to_otherend) failed: %i\n", err);
+		dev_warn(dev, "%s (talk_to_otherend) failed: %i\n",
+			xen_suspend ? "resume" : "restore", err);
 		return err;
 	}
 
-	xdev->state = XenbusStateInitialising;
+	if (xen_suspend)
+		xdev->state = XenbusStateInitialising;
 
-	if (drv->resume) {
-		err = drv->resume(xdev);
-		if (err) {
-			dev_warn(dev, "resume failed: %i\n", err);
-			return err;
-		}
+	if (xen_suspend)
+		cb = drv->resume;
+	else
+		cb = drv->restore;
+
+	if (cb)
+		err = cb(xdev);
+
+	if (err) {
+		dev_warn(dev, "%s failed: %i\n",
+			xen_suspend ? "resume" : "restore", err);
+		return err;
 	}
 
 	err = watch_otherend(xdev);
 	if (err) {
-		dev_warn(dev, "resume (watch_otherend) failed: %d\n", err);
+		dev_warn(dev, "%s (watch_otherend) failed: %d.\n",
+			xen_suspend ? "resume" : "restore", err);
 		return err;
 	}
 
@@ -717,8 +748,44 @@ EXPORT_SYMBOL_GPL(xenbus_dev_resume);
 
 int xenbus_dev_cancel(struct device *dev)
 {
-	/* Do nothing */
-	DPRINTK("cancel");
+	int err = 0;
+	struct xenbus_driver *drv;
+	struct xenbus_device *xdev
+		= container_of(dev, struct xenbus_device, dev);
+	bool xen_suspend = xen_suspend_mode_is_xen_suspend();
+
+	if (xen_suspend) {
+		/* Do nothing */
+		DPRINTK("cancel");
+		return 0;
+	}
+
+	DPRINTK("%s", xdev->nodename);
+
+	if (dev->driver == NULL)
+		return 0;
+	drv = to_xenbus_driver(dev->driver);
+
+	err = talk_to_otherend(xdev);
+	if (err) {
+		dev_warn(dev, "thaw (talk_to_otherend) failed: %d.\n", err);
+		return err;
+	}
+
+	if (drv->thaw) {
+		err = drv->thaw(xdev);
+		if (err) {
+			dev_warn(dev, "thaw failed: %i\n", err);
+			return err;
+		}
+	}
+
+	err = watch_otherend(xdev);
+	if (err) {
+		dev_warn(dev, "thaw (watch_otherend) failed: %d.\n", err);
+		return err;
+	}
+
 	return 0;
 }
 EXPORT_SYMBOL_GPL(xenbus_dev_cancel);
@@ -909,7 +976,7 @@ static struct notifier_block xenbus_resume_nb = {
 
 static int __init xenbus_init(void)
 {
-	int err = 0;
+	int err;
 	uint64_t v = 0;
 	xen_store_domain_type = XS_UNKNOWN;
 
@@ -949,6 +1016,29 @@ static int __init xenbus_init(void)
 		err = hvm_get_parameter(HVM_PARAM_STORE_PFN, &v);
 		if (err)
 			goto out_error;
+		/*
+		 * Uninitialized hvm_params are zero and return no error.
+		 * Although it is theoretically possible to have
+		 * HVM_PARAM_STORE_PFN set to zero on purpose, in reality it is
+		 * not zero when valid. If zero, it means that Xenstore hasn't
+		 * been properly initialized. Instead of attempting to map a
+		 * wrong guest physical address return error.
+		 *
+		 * Also recognize all bits set as an invalid value.
+		 */
+		if (!v || !~v) {
+			err = -ENOENT;
+			goto out_error;
+		}
+		/* Avoid truncation on 32-bit. */
+#if BITS_PER_LONG == 32
+		if (v > ULONG_MAX) {
+			pr_err("%s: cannot handle HVM_PARAM_STORE_PFN=%llx > ULONG_MAX\n",
+			       __func__, v);
+			err = -EINVAL;
+			goto out_error;
+		}
+#endif
 		xen_store_gfn = (unsigned long)v;
 		xen_store_interface =
 			xen_remap(xen_store_gfn << XEN_PAGE_SHIFT,
@@ -983,8 +1073,10 @@ static int __init xenbus_init(void)
 	 */
 	proc_create_mount_point("xen");
 #endif
+	return 0;
 
 out_error:
+	xen_store_domain_type = XS_UNKNOWN;
 	return err;
 }
 
