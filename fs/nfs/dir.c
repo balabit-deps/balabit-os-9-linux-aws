@@ -2695,9 +2695,30 @@ static struct nfs_access_entry *nfs_access_search_rbtree(struct inode *inode, co
 	return NULL;
 }
 
+static u64 nfs_access_login_time(const struct task_struct *task,
+				 const struct cred *cred)
+{
+	const struct task_struct *parent;
+	const struct cred *pcred;
+	u64 ret;
+
+	rcu_read_lock();
+	for (;;) {
+		parent = rcu_dereference(task->real_parent);
+		pcred = rcu_dereference(parent->cred);
+		if (parent == task || cred_fscmp(pcred, cred) != 0)
+			break;
+		task = parent;
+	}
+	ret = task->start_time;
+	rcu_read_unlock();
+	return ret;
+}
+
 static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *cred, u32 *mask, bool may_block)
 {
 	struct nfs_inode *nfsi = NFS_I(inode);
+	u64 login_time = nfs_access_login_time(current, cred);
 	struct nfs_access_entry *cache;
 	bool retry = true;
 	int err;
@@ -2725,6 +2746,9 @@ static int nfs_access_get_cached_locked(struct inode *inode, const struct cred *
 		spin_lock(&inode->i_lock);
 		retry = false;
 	}
+	err = -ENOENT;
+	if ((s64)(login_time - cache->timestamp) > 0)
+		goto out;
 	*mask = cache->mask;
 	list_move_tail(&cache->lru, &nfsi->access_cache_entry_lru);
 	err = 0;
@@ -2743,6 +2767,7 @@ static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cre
 	 * but do it without locking.
 	 */
 	struct nfs_inode *nfsi = NFS_I(inode);
+	u64 login_time = nfs_access_login_time(current, cred);
 	struct nfs_access_entry *cache;
 	int err = -ECHILD;
 	struct list_head *lh;
@@ -2756,6 +2781,8 @@ static int nfs_access_get_cached_rcu(struct inode *inode, const struct cred *cre
 	    cred_fscmp(cred, cache->cred) != 0)
 		cache = NULL;
 	if (cache == NULL)
+		goto out;
+	if ((s64)(login_time - cache->timestamp) > 0)
 		goto out;
 	if (nfs_check_cache_invalid(inode, NFS_INO_INVALID_ACCESS))
 		goto out;
@@ -2802,6 +2829,7 @@ static void nfs_access_add_rbtree(struct inode *inode, struct nfs_access_entry *
 		else
 			goto found;
 	}
+	set->timestamp = ktime_get_ns();
 	rb_link_node(&set->rb_node, parent, p);
 	rb_insert_color(&set->rb_node, root_node);
 	list_add_tail(&set->lru, &nfsi->access_cache_entry_lru);
