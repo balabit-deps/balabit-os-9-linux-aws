@@ -1,3 +1,36 @@
+linux (5.15.0-76.83) jammy; urgency=medium
+
+  * jammy/linux: 5.15.0-76.83 -proposed tracker (LP: #2023905)
+
+  * cls_flower: off-by-one in fl_set_geneve_opt (LP: #2023577)
+    - net/sched: flower: fix possible OOB write in fl_set_geneve_opt()
+
+  * Some INVLPG implementations can leave Global translations unflushed when
+    PCIDs are enabled (LP: #2023220)
+    - x86/mm: Avoid incomplete Global INVLPG flushes
+
+ -- Thadeu Lima de Souza Cascardo <cascardo@canonical.com>  Thu, 15 Jun 2023 14:47:18 -0300
+
+linux (5.15.0-75.82) jammy; urgency=medium
+
+  * jammy/linux: 5.15.0-75.82 -proposed tracker (LP: #2023065)
+
+  * Jammy update: v5.15.102 upstream stable release (LP: #2020393)
+    - wifi: cfg80211: Partial revert "wifi: cfg80211: Fix use after free for wext"
+
+  * Packaging resync (LP: #1786013)
+    - [Packaging] resync git-ubuntu-log
+    - [Packaging] resync getabis
+
+  * fix typo in config-checks invocation (LP: #2020413)
+    - [Packaging] fix typo when calling the old config-check
+    - [Packaging] fix typo in 4-checks.mk
+
+  * support python < 3.9 with annotations (LP: #2020531)
+    - [Packaging] kconfig/annotations.py: support older way of merging dicts
+
+ -- Luke Nowakowski-Krijger <luke.nowakowskikrijger@canonical.com>  Tue, 06 Jun 2023 15:50:32 -0700
+
 linux (5.15.0-74.81) jammy; urgency=medium
 
   * jammy/linux: 5.15.0-74.81 -proposed tracker (LP: #2019420)
