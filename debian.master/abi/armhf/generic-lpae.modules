@@ -1138,6 +1138,7 @@ dp83tc811
 dpot-dac
 dps310
 dps920ab
+dpt_i2o
 drbd
 drivetemp
 drm
@@ -3512,7 +3513,6 @@ npcm-rng
 npcm750-pwm-fan
 npcm_adc
 nps_enet
-ns
 ns558
 ns83820
 nsh
