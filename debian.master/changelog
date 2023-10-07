@@ -1,52 +1,60 @@
-linux (5.15.0-84.93) jammy; urgency=medium
-linux (5.15.0-86.96) jammy; urgency=medium
-  * jammy/linux: 5.15.0-84.93 -proposed tracker (LP: #2034202)
+linux-aws (5.15.0-1047.52bb1) jammy; urgency=medium
+
+  * Balabit patched version
+
+ -- Balabit Platform Team <devnull@dev.null>  Sat, 07 Oct 2023 02:42:59 +0000
+
+linux-aws (5.15.0-1047.52) jammy; urgency=medium
+
+  * jammy/linux-aws: 5.15.0-1047.52 -proposed tracker (LP: #2036533)
+
+  [ Ubuntu: 5.15.0-86.96 ]
+
   * jammy/linux: 5.15.0-86.96 -proposed tracker (LP: #2036575)
-  * Packaging resync (LP: #1786013)
-    - [Packaging] update helper scripts
   * 5.15.0-85 live migration regression (LP: #2036675)
     - Revert "KVM: x86: Always enable legacy FP/SSE in allowed user XFEATURES"
     - Revert "x86/kvm/fpu: Limit guest user_xfeatures to supported bits of XCR0"
-
   * Regression for ubuntu_bpf test build on Jammy 5.15.0-85.95 (LP: #2035181)
     - selftests/bpf: fix static assert compilation issue for test_cls_*.c
-
   * `refcount_t: underflow; use-after-free.` on hidon w/ 5.15.0-85-generic
     (LP: #2034447)
     - crypto: rsa-pkcs1pad - Use helper to set reqsize
 
- -- Stefan Bader <stefan.bader@canonical.com>  Wed, 20 Sep 2023 09:32:27 +0200
+ -- Stefan Bader <stefan.bader@canonical.com>  Wed, 20 Sep 2023 11:30:46 +0200
 
-linux (5.15.0-85.95) jammy; urgency=medium
+linux-aws (5.15.0-1046.51) jammy; urgency=medium
+
+  * jammy/linux-aws: 5.15.0-1046.51 -proposed tracker (LP: #2033782)
+
+  * Packaging resync (LP: #1786013)
+    - [Packaging] update helper scripts
+
+  [ Ubuntu: 5.15.0-85.95 ]
 
   * jammy/linux: 5.15.0-85.95 -proposed tracker (LP: #2033821)
-
   * Please enable Renesas RZ platform serial installer (LP: #2022361)
     - [Config] enable hihope RZ/G2M serial console
     - [Config] Mark sh-sci as built-in
-
   * Request backport of xen timekeeping performance improvements (LP: #2033122)
     - x86/xen/time: prefer tsc as clocksource when it is invariant
-
   * kdump doesn't work with UEFI secure boot and kernel lockdown enabled on
     ARM64 (LP: #2033007)
     - [Config]: Enable CONFIG_KEXEC_IMAGE_VERIFY_SIG
     - kexec, KEYS: make the code in bzImage64_verify_sig generic
     - arm64: kexec_file: use more system keyrings to verify kernel image signature
-
   * ubuntu_kernel_selftests:net:vrf-xfrm-tests.sh: 8 failed test cases on
     jammy/fips (LP: #2019880)
     - selftests: net: vrf-xfrm-tests: change authentication and encryption algos
-
   * ubuntu_kernel_selftests:net:tls: 88 failed test cases on jammy/fips
     (LP: #2019868)
     - selftests/harness: allow tests to be skipped during setup
     - selftests: net: tls: check if FIPS mode is enabled
-
   * A general-proteciton exception during guest migration to unsupported PKRU
     machine (LP: 2032164, reverted)
     - x86/kvm/fpu: Limit guest user_xfeatures to supported bits of XCR0
     - KVM: x86: Always enable legacy FP/SSE in allowed user XFEATURES
+  * CVE-2023-4569
+    - netfilter: nf_tables: deactivate catchall elements in next generation
   * CVE-2023-20569
     - x86/cpu, kvm: Add support for CPUID_80000021_EAX
     - x86/srso: Add a Speculative RAS Overflow mitigation
@@ -76,24 +84,25 @@ linux (5.15.0-85.95) jammy; urgency=medium
     - x86/srso: Correct the mitigation status when SMT is disabled
     - objtool/x86: Fix SRSO mess
     - Ubuntu: [Config]: enable Speculative Return Stack Overflow mitigation
-
   * Fix unreliable ethernet cable detection on I219 NIC (LP: #2028122)
     - e1000e: Use PME poll to circumvent unreliable ACPI wake
-
   * Need to get fine-grained control for FAN(TFN) Participant. (LP: #2031333)
     - ACPI: fan: Separate file for attributes creation
     - ACPI: fan: Optimize struct acpi_fan_fif
     - ACPI: fan: Properly handle fine grain control
     - ACPI: fan: Add additional attributes for fine grain control
-
   * [SRU][Ubuntu 22.04.1] Unable to interpret the frequency values in
     cpuinfo_min_freq and cpuino_max_freq sysfs files. (LP: #2030924)
     - cpufreq: intel_pstate: Fix scaling for hybrid-capable
-
+  * CVE-2023-40283
+    - Bluetooth: L2CAP: Fix use-after-free in l2cap_sock_ready_cb
+  * CVE-2023-20588
+    - x86/bugs: Increase the x86 bugs vector size to two u32s
+    - x86/CPU/AMD: Do not leak quotient data after a division by 0
+    - x86/CPU/AMD: Fix the DIV(0) initial fix attempt
   * CVE-2023-4194
     - net: tun_chr_open(): set sk_uid from current_fsuid()
     - net: tap_open(): set sk_uid from current_fsuid()
-
   * CVE-2023-4155
     - KVM: SEV: Refactor out sev_es_state struct
     - KVM: SEV: Fall back to vmalloc for SEV-ES scratch area if necessary
@@ -101,18 +110,14 @@ linux (5.15.0-85.95) jammy; urgency=medium
     - KVM: SVM: Exit to userspace on ENOMEM/EFAULT GHCB errors
     - KVM: SEV: snapshot the GHCB before accessing it
     - KVM: SEV: only access GHCB fields once
-
   * CVE-2023-1206
     - tcp: Reduce chance of collisions in inet6_hashfn().
-
   * Crashing with CPU soft lock on GA kernel 5.15.0.79.76 and HWE kernel
     5.19.0-46.47-22.04.1 (LP: #2032176)
     - Revert "KVM: x86: enable TDP MMU by default"
-
   * Jammy update: v5.15.122 upstream stable release (LP: #2032690)
     - Linux 5.15.122
     - Upstream stable to v5.15.122
-
   * Jammy update: v5.15.121 upstream stable release (LP: #2032689)
     - netfilter: nf_tables: drop map element references from preparation phase
     - fs: pipe: reveal missing function protoypes
@@ -657,7 +662,6 @@ linux (5.15.0-85.95) jammy; urgency=medium
     - net/sched: sch_qfq: reintroduce lmax bound check for MTU
     - drm/atomic: Fix potential use-after-free in nonblocking commits
     - Linux 5.15.121
-
   * Jammy update: v5.15.120 upstream stable release (LP: #2032688)
     - mptcp: fix possible divide by zero in recvmsg()
     - mptcp: consolidate fallback and non fallback state machine
@@ -679,7 +683,6 @@ linux (5.15.0-85.95) jammy; urgency=medium
     - parisc: Delete redundant register definitions in <asm/assembly.h>
     - nubus: Partially revert proc_create_single_data() conversion
     - Linux 5.15.120
-
   * Jammy update: v5.15.119 upstream stable release (LP: #2032683)
     - drm/amd/display: fix the system hang while disable PSR
     - tracing: Add tracing_reset_all_online_cpus_unlocked() function
@@ -778,7 +781,6 @@ linux (5.15.0-85.95) jammy; urgency=medium
       cycle
     - act_mirred: remove unneded merge conflict markers
     - Linux 5.15.119
-
   * Jammy update: v5.15.118 upstream stable release (LP: #2030239)
     - test_firmware: Use kstrtobool() instead of strtobool()
     - test_firmware: prevent race conditions by a correct implementation of
@@ -890,7 +892,6 @@ linux (5.15.0-85.95) jammy; urgency=medium
     - mmc: block: ensure error propagation for non-blk
     - nilfs2: reject devices with insufficient block count
     - Linux 5.15.118
-
   * Jammy update: v5.15.117 upstream stable release (LP: #2030107)
     - ata: ahci: fix enum constants for gcc-13
     - gcc-plugins: Reorganize gimple includes for GCC 13
@@ -984,16 +985,21 @@ linux (5.15.0-85.95) jammy; urgency=medium
     - vhost_vdpa: support PACKED when setting-getting vring_base
     - ext4: only check dquot_initialize_needed() when debugging
     - Linux 5.15.117
-
   * CVE-2023-4273
     - exfat: check if filename entries exceeds max filename length
-
- -- Thadeu Lima de Souza Cascardo <cascardo@canonical.com>  Tue, 05 Sep 2023 10:31:56 -0300
+  * CVE-2023-4128
+    - net/sched: cls_u32: No longer copy tcf_result on update to avoid use-after-
+      free
+    - net/sched: cls_fw: No longer copy tcf_result on update to avoid use-after-
+      free
+    - net/sched: cls_route: No longer copy tcf_result on update to avoid use-
+      after-free
   * CVE-2023-3863
     - nfc: llcp: simplify llcp_sock_connect() error paths
     - net: nfc: Fix use-after-free caused by nfc_llcp_find_local
 
- -- Stefan Bader <stefan.bader@canonical.com>  Fri, 01 Sep 2023 14:52:39 +0200
+ -- Tim Gardner <tim.gardner@canonical.com>  Fri, 08 Sep 2023 09:07:59 -0600
+
 linux-aws (5.15.0-1045.50bb1) jammy; urgency=medium
 
   * Balabit patched version
