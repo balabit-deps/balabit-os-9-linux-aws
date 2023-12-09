@@ -1,65 +1,69 @@
-linux (5.15.0-89.99) jammy; urgency=medium
-linux (5.15.0-91.101) jammy; urgency=medium
-  * jammy/linux: 5.15.0-89.99 -proposed tracker (LP: #2041949)
+linux-aws (5.15.0-1051.56bb1) jammy; urgency=medium
+
+  * Balabit patched version
+
+ -- Balabit Platform Team <devnull@dev.null>  Sat, 09 Dec 2023 03:33:38 +0000
+
+linux-aws (5.15.0-1051.56) jammy; urgency=medium
+
+  * jammy/linux-aws: 5.15.0-1051.56 -proposed tracker (LP: #2041561)
+
+  * Packaging resync (LP: #1786013)
+    - [Packaging] resync git-ubuntu-log
+    - [Packaging] resync update-dkms-versions helper
+
+  [ Ubuntu: 5.15.0-91.101 ]
+
   * jammy/linux: 5.15.0-91.101 -proposed tracker (LP: #2043452)
-  * CVE-2023-31085
-    - ubi: Refuse attaching if mtd's erasesize is 0
   * USB bus error after upgrading to proposed kernel on lunar and jammy
     (LP: #2043197)
     - USB: core: Fix oversight in SuperSpeed initialization
-  * CVE-2023-45871
-    - igb: set max size RX buffer when store bad packet is enabled
- -- Stefan Bader <stefan.bader@canonical.com>  Tue, 14 Nov 2023 11:47:55 +0100
 
-linux (5.15.0-90.100) jammy; urgency=medium
+  [ Ubuntu: 5.15.0-90.100 ]
 
   * jammy/linux: 5.15.0-90.100 -proposed tracker (LP: #2041603)
+  * CVE-2023-25775
+    - RDMA/irdma: Remove irdma_uk_mw_bind()
+    - RDMA/irdma: Remove irdma_sc_send_lsmm_nostag()
+    - RDMA/irdma: Remove irdma_cqp_up_map_cmd()
+    - RDMA/irdma: Remove irdma_get_hw_addr()
+    - RDMA/irdma: Make irdma_uk_cq_init() return a void
+    - RDMA/irdma: optimize rx path by removing unnecessary copy
+    - RDMA/irdma: Remove enum irdma_status_code
+    - RDMA/irdma: Remove excess error variables
+    - RDMA/irdma: Prevent zero-length STAG registration
   * CVE-2023-39189
     - netfilter: nfnetlink_osf: avoid OOB read
-
   * SMC stats: Wrong bucket calculation for payload of exactly 4096 bytes
     (LP: #2039575)
     - net/smc: Fix pos miscalculation in statistics
-
   * CVE-2023-45871
     - igb: set max size RX buffer when store bad packet is enabled
-
   * CVE-2023-39193
     - netfilter: xt_sctp: validate the flag_info count
-
   * CVE-2023-39192
     - netfilter: xt_u32: validate user space input
-
   * CVE-2023-31085
     - ubi: Refuse attaching if mtd's erasesize is 0
-
   * CVE-2023-5717
     - perf: Disallow mis-matched inherited group reads
-
   * CVE-2023-5178
     - nvmet-tcp: Fix a possible UAF in queue intialization setup
-
   * CVE-2023-5158
     - vringh: don't use vringh_kiov_advance() in vringh_iov_xfer()
-
   * [SRU][J/L/M] UBUNTU: [Packaging] Make WWAN driver a loadable module
     (LP: #2033406)
     - [Packaging] Make WWAN driver loadable modules
-
   * HP ProBook 450 G8 Notebook fail to wifi test (LP: #2037513)
     - iwlwifi: mvm: Don't fail if PPAG isn't supported
     - wifi: iwlwifi: fw: skip PPAG for JF
-
   * usbip: error: failed to open /usr/share/hwdata//usb.ids (LP: #2039439)
     - [Packaging] Make linux-tools-common depend on hwdata
-
   * scripts/pahole-flags.sh change return to exit 0 (LP: #2035123)
     - SAUCE: scripts/pahole-flags.sh change return to exit 0
-
   * Unable to use nvme drive to install Ubuntu 23.10 (LP: #2040157)
     - misc: rtsx: Fix some platforms can not boot and move the l1ss judgment to
       probe
-
   * Jammy update: v5.15.131 upstream stable release (LP: #2039610)
     - erofs: ensure that the post-EOF tails are all zeroed
     - ksmbd: fix wrong DataOffset validation of create context
@@ -92,7 +96,6 @@ linux (5.15.0-90.100) jammy; urgency=medium
     - usb: typec: tcpci: move tcpci.h to include/linux/usb/
     - usb: typec: tcpci: clear the fault status bit
     - Linux 5.15.131
-
   * Jammy update: v5.15.130 upstream stable release (LP: #2039608)
     - ACPI: thermal: Drop nocrt parameter
     - module: Expose module_init_layout_section()
@@ -104,10 +107,8 @@ linux (5.15.0-90.100) jammy; urgency=medium
     - rcu-tasks: Wait for trc_read_check_handler() IPIs
     - rcu-tasks: Add trc_inspect_reader() checks for exiting critical section
     - Linux 5.15.130
-
   * CVE-2023-42754
     - ipv4: fix null-deref in ipv4_link_failure
-
   * Jammy update: v5.15.129 upstream stable release (LP: #2039227)
     - NFSv4.2: fix error handling in nfs42_proc_getxattr
     - NFSv4: fix out path in __nfs4_get_acl_uncached
@@ -198,7 +199,6 @@ linux (5.15.0-90.100) jammy; urgency=medium
     - mm: memory-failure: fix unexpected return value in soft_offline_page()
     - mm,ima,kexec,of: use memblock_free_late from ima_free_kexec_buffer
     - Linux 5.15.129
-
   * Jammy update: v5.15.128 upstream stable release (LP: #2038486)
     - mmc: sdhci-f-sdh30: Replace with sdhci_pltfm
     - selftests: forwarding: tc_actions: cleanup temporary files when test is
@@ -326,7 +326,6 @@ linux (5.15.0-90.100) jammy; urgency=medium
       enabled
     - mmc: f-sdh30: fix order of function calls in sdhci_f_sdh30_remove
     - Linux 5.15.128
-
   * Jammy update: v5.15.127 upstream stable release (LP: #2038382)
     - ksmbd: validate command request size
     - ksmbd: fix wrong next length validation of ea buffer in smb2_set_ea()
@@ -419,14 +418,15 @@ linux (5.15.0-90.100) jammy; urgency=medium
     - timers/nohz: Last resort update jiffies on nohz_full IRQ entry
     - Linux 5.15.127
     - Upstream stable to v5.15.127
-
   * CVE-2023-37453
     - USB: core: Unite old scheme and new scheme descriptor reads
     - USB: core: Change usb_get_device_descriptor() API
     - USB: core: Fix race by not overwriting udev->descriptor in hub_port_init()
+  * Packaging resync (LP: #1786013)
+    - [Packaging] update helper scripts
 
- -- Thadeu Lima de Souza Cascardo <cascardo@canonical.com>  Mon, 30 Oct 2023 17:15:23 -0300
- -- Stefan Bader <stefan.bader@canonical.com>  Mon, 30 Oct 2023 12:40:14 +0100
+ -- Tim Gardner <tim.gardner@canonical.com>  Fri, 17 Nov 2023 12:03:45 -0700
+
 linux-aws (5.15.0-1050.55bb1) jammy; urgency=medium
 
   * Balabit patched version
