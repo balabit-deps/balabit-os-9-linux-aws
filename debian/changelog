@@ -1,14 +1,31 @@
-linux-aws (5.15.0-1051.56bb2) jammy; urgency=medium
+linux-aws (5.15.0-1052.57) jammy; urgency=medium
 
-  * Balabit patched version
+  * jammy/linux-aws: 5.15.0-1052.57 -proposed tracker (LP: #2048572)
 
- -- Balabit Platform Team <devnull@dev.null>  Mon, 15 Jan 2024 16:48:03 +0100
+  * Packaging resync (LP: #1786013)
+    - [Packaging] remove helper scripts
 
-linux-aws (5.15.0-1051.56bb1) jammy; urgency=medium
+  [ Ubuntu: 5.15.0-92.102 ]
 
-  * Balabit patched version
+  * jammy/linux: 5.15.0-92.102 -proposed tracker (LP: #2048614)
+  * Packaging resync (LP: #1786013)
+    - [Packaging] resync git-ubuntu-log
+  * CVE-2024-0193
+    - netfilter: nf_tables: skip set commit for deleted/destroyed sets
+  * CVE-2023-6040
+    - netfilter: nf_tables: Reject tables of unsupported family
+  * CVE-2023-6606
+    - smb: client: fix OOB in smbCalcSize()
+  * CVE-2023-6817
+    - netfilter: nft_set_pipapo: skip inactive elements during set walk
+  * CVE-2023-6932
+    - ipv4: igmp: fix refcnt uaf issue when receiving igmp query packet
+  * CVE-2023-6931
+    - perf/core: Add a new read format to get a number of lost samples
+    - perf: Fix perf_event_validate_size()
+    - perf: Fix perf_event_validate_size() lockdep splat
 
- -- Balabit Platform Team <devnull@dev.null>  Sat, 09 Dec 2023 03:33:38 +0000
+ -- Tim Gardner <tim.gardner@canonical.com>  Mon, 15 Jan 2024 07:53:13 -0700
 
 linux-aws (5.15.0-1051.56) jammy; urgency=medium
 
@@ -433,12 +450,6 @@ linux-aws (5.15.0-1051.56) jammy; urgency=medium
 
  -- Tim Gardner <tim.gardner@canonical.com>  Fri, 17 Nov 2023 12:03:45 -0700
 
-linux-aws (5.15.0-1050.55bb1) jammy; urgency=medium
-
-  * Balabit patched version
-
- -- Balabit Platform Team <devnull@dev.null>  Sat, 25 Nov 2023 03:37:45 +0000
-
 linux-aws (5.15.0-1050.55) jammy; urgency=medium
 
   * jammy/linux-aws: 5.15.0-1050.55 -proposed tracker (LP: #2041907)
@@ -464,12 +475,6 @@ linux-aws (5.15.0-1050.55) jammy; urgency=medium
     - [Packaging] update helper scripts
 
  -- Tim Gardner <tim.gardner@canonical.com>  Sun, 05 Nov 2023 02:18:38 -0700
-
-linux-aws (5.15.0-1049.54bb1) jammy; urgency=medium
-
-  * Balabit patched version
-
- -- Balabit Platform Team <devnull@dev.null>  Sat, 04 Nov 2023 03:32:00 +0000
 
 linux-aws (5.15.0-1049.54) jammy; urgency=medium
 
@@ -878,12 +883,6 @@ linux-aws (5.15.0-1049.54) jammy; urgency=medium
 
  -- Tim Gardner <tim.gardner@canonical.com>  Fri, 06 Oct 2023 13:42:28 -0600
 
-linux-aws (5.15.0-1048.53bb1) jammy; urgency=medium
-
-  * Balabit patched version
-
- -- Balabit Platform Team <devnull@dev.null>  Sat, 21 Oct 2023 02:31:39 +0000
-
 linux-aws (5.15.0-1048.53) jammy; urgency=medium
 
   * jammy/linux-aws: 5.15.0-1048.53 -proposed tracker (LP: #2038169)
@@ -934,12 +933,6 @@ linux-aws (5.15.0-1048.53) jammy; urgency=medium
     - netfilter: nftables: exthdr: fix 4-byte stack OOB write
 
  -- Tim Gardner <tim.gardner@canonical.com>  Wed, 04 Oct 2023 06:35:57 -0600
-
-linux-aws (5.15.0-1047.52bb1) jammy; urgency=medium
-
-  * Balabit patched version
-
- -- Balabit Platform Team <devnull@dev.null>  Sat, 07 Oct 2023 02:42:59 +0000
 
 linux-aws (5.15.0-1047.52) jammy; urgency=medium
 
@@ -1937,12 +1930,6 @@ linux-aws (5.15.0-1046.51) jammy; urgency=medium
 
  -- Tim Gardner <tim.gardner@canonical.com>  Fri, 08 Sep 2023 09:07:59 -0600
 
-linux-aws (5.15.0-1045.50bb1) jammy; urgency=medium
-
-  * Balabit patched version
-
- -- Balabit Platform Team <devnull@dev.null>  Sat, 23 Sep 2023 02:35:56 +0000
-
 linux-aws (5.15.0-1045.50) jammy; urgency=medium
 
   * jammy/linux-aws: 5.15.0-1045.50 -proposed tracker (LP: #2034162)
@@ -1969,12 +1956,6 @@ linux-aws (5.15.0-1045.50) jammy; urgency=medium
       after-free
 
  -- Tim Gardner <tim.gardner@canonical.com>  Wed, 06 Sep 2023 08:46:10 -0600
-
-linux-aws (5.15.0-1044.49bb1) jammy; urgency=medium
-
-  * Balabit patched version
-
- -- Balabit Platform Team <devnull@dev.null>  Tue, 12 Sep 2023 21:28:02 +0200
 
 linux-aws (5.15.0-1044.49) jammy; urgency=medium
 
@@ -3500,12 +3481,6 @@ linux-aws (5.15.0-1041.46) jammy; urgency=medium
     - [Packaging] update annotations scripts
 
  -- Tim Gardner <tim.gardner@canonical.com>  Tue, 18 Jul 2023 09:56:24 -0600
-
-linux-aws (5.15.0-1040.45bb1) jammy; urgency=medium
-
-  * debian.aws: re-enable AUFS filesystem in kernel
-
- -- Balabit Platform Team <devnull@dev.null>  Fri, 28 Jul 2023 12:35:43 +0200
 
 linux-aws (5.15.0-1040.45) jammy; urgency=medium
 
