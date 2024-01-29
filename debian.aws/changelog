@@ -1,3 +1,9 @@
+linux-aws (5.15.0-1052.57bb1) jammy; urgency=medium
+
+  * Balabit patched version
+
+ -- Balabit Platform Team <devnull@dev.null>  Mon, 29 Jan 2024 15:51:30 +0100
+
 linux-aws (5.15.0-1052.57) jammy; urgency=medium
 
   * jammy/linux-aws: 5.15.0-1052.57 -proposed tracker (LP: #2048572)
@@ -26,6 +32,18 @@ linux-aws (5.15.0-1052.57) jammy; urgency=medium
     - perf: Fix perf_event_validate_size() lockdep splat
 
  -- Tim Gardner <tim.gardner@canonical.com>  Mon, 15 Jan 2024 07:53:13 -0700
+
+linux-aws (5.15.0-1051.56bb2) jammy; urgency=medium
+
+  * Balabit patched version
+
+ -- Balabit Platform Team <devnull@dev.null>  Mon, 15 Jan 2024 16:48:09 +0100
+
+linux-aws (5.15.0-1051.56bb1) jammy; urgency=medium
+
+  * Balabit patched version
+
+ -- Balabit Platform Team <devnull@dev.null>  Sat, 09 Dec 2023 03:33:38 +0000
 
 linux-aws (5.15.0-1051.56) jammy; urgency=medium
 
@@ -3481,6 +3499,12 @@ linux-aws (5.15.0-1041.46) jammy; urgency=medium
     - [Packaging] update annotations scripts
 
  -- Tim Gardner <tim.gardner@canonical.com>  Tue, 18 Jul 2023 09:56:24 -0600
+
+linux-aws (5.15.0-1040.45bb1) jammy; urgency=medium
+
+  * debian.aws: re-enable AUFS filesystem in kernel
+
+ -- Balabit Platform Team <devnull@dev.null>  Fri, 28 Jul 2023 12:35:43 +0200
 
 linux-aws (5.15.0-1040.45) jammy; urgency=medium
 
