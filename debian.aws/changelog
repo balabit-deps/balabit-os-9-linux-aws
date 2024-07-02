@@ -1,3 +1,9 @@
+linux-aws (5.15.0-1064.70bb1) jammy; urgency=medium
+
+  * Balabit patched version
+
+ -- Balabit Platform Team <devnull@dev.null>  Tue, 02 Jul 2024 14:15:34 +0200
+
 linux-aws (5.15.0-1064.70) jammy; urgency=medium
 
   * jammy/linux-aws: 5.15.0-1064.70 -proposed tracker (LP: #2068191)
