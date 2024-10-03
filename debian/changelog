@@ -1,3 +1,19 @@
+linux-aws (5.15.0-1071.77) jammy; urgency=medium
+
+  * jammy/linux-aws: 5.15.0-1071.77 -proposed tracker (LP: #2082124)
+
+  [ Ubuntu: 5.15.0-124.134 ]
+
+  * jammy/linux: 5.15.0-124.134 -proposed tracker (LP: #2082176)
+  * CVE-2024-45016
+    - netem: fix return value if duplicate enqueue fails
+  * CVE-2024-38630
+    - watchdog: cpu5wdt.c: Fix use-after-free bug caused by cpu5wdt_trigger
+  * CVE-2024-27397
+    - netfilter: nf_tables: use timestamp to check for set element timeout
+
+ -- Philip Cox <philip.cox@canonical.com>  Thu, 03 Oct 2024 10:36:36 -0400
+
 linux-aws (5.15.0-1070.76) jammy; urgency=medium
 
   * jammy/linux-aws: 5.15.0-1070.76 -proposed tracker (LP: #2078104)
