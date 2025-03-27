@@ -63,7 +63,7 @@ Vcs-Git: git://git.launchpad.net/~canonical-kernel/ubuntu/+source/linux-aws/+git
 XS-Testsuite: autopkgtest
 #XS-Testsuite-Depends: gcc-4.7 binutils
 
-Package: linux-aws-headers-5.15.0-1081
+Package: linux-aws-headers-5.15.0-1082
 Build-Profiles: <!stage1>
 Architecture: all
 Multi-Arch: foreign
@@ -74,46 +74,46 @@ Breaks: iscsitarget-dkms (<< 1.4.20.3+svn502-2ubuntu4.4)
 Description: Header files related to Linux kernel version 5.15.0
  This package provides kernel header files for version 5.15.0, for sites
  that want the latest kernel headers. Please read
- /usr/share/doc/linux-aws-headers-5.15.0-1081/debian.README.gz for details
+ /usr/share/doc/linux-aws-headers-5.15.0-1082/debian.README.gz for details
 
-Package: linux-aws-tools-5.15.0-1081
+Package: linux-aws-tools-5.15.0-1082
 Build-Profiles: <!stage1>
 Architecture: amd64 arm64
 Section: devel
 Priority: optional
 Depends: ${misc:Depends}, ${shlibs:Depends}, linux-tools-common
-Description: Linux kernel version specific tools for version 5.15.0-1081
+Description: Linux kernel version specific tools for version 5.15.0-1082
  This package provides the architecture dependant parts for kernel
  version locked tools (such as perf and x86_energy_perf_policy) for
- version 5.15.0-1081 on
+ version 5.15.0-1082 on
  64 bit x86.
- You probably want to install linux-tools-5.15.0-1081-<flavour>.
+ You probably want to install linux-tools-5.15.0-1082-<flavour>.
 
-Package: linux-aws-cloud-tools-5.15.0-1081
+Package: linux-aws-cloud-tools-5.15.0-1082
 Build-Profiles: <!stage1>
 Architecture: amd64 arm64
 Section: devel
 Priority: optional
 Depends: ${misc:Depends}, ${shlibs:Depends}, linux-cloud-tools-common
-Description: Linux kernel version specific cloud tools for version 5.15.0-1081
+Description: Linux kernel version specific cloud tools for version 5.15.0-1082
  This package provides the architecture dependant parts for kernel
- version locked tools for cloud tools for version 5.15.0-1081 on
+ version locked tools for cloud tools for version 5.15.0-1082 on
  64 bit x86.
- You probably want to install linux-cloud-tools-5.15.0-1081-<flavour>.
+ You probably want to install linux-cloud-tools-5.15.0-1082-<flavour>.
 
 
 
-Package: linux-image-unsigned-5.15.0-1081-aws
+Package: linux-image-unsigned-5.15.0-1082-aws
 Build-Profiles: <!stage1>
 Architecture: amd64 arm64
 Section: kernel
 Priority: optional
 Provides: linux-image, fuse-module, ${linux:rprovides}
-Depends: ${misc:Depends}, ${shlibs:Depends}, kmod, linux-base (>= 4.5ubuntu1~16.04.1), linux-modules-5.15.0-1081-aws
+Depends: ${misc:Depends}, ${shlibs:Depends}, kmod, linux-base (>= 4.5ubuntu1~16.04.1), linux-modules-5.15.0-1082-aws
 Recommends: grub-pc [amd64] | grub-efi-amd64 [amd64] | grub-efi-ia32 [amd64] | grub [amd64] | lilo [amd64] | grub-efi-arm64 [arm64], initramfs-tools | linux-initramfs-tool
 Breaks: flash-kernel (<< 3.90ubuntu2) [arm64 armhf], s390-tools (<< 2.3.0-0ubuntu3) [s390x]
-Conflicts: linux-image-5.15.0-1081-aws
-Suggests: fdutils, linux-aws-doc-5.15.0 | linux-aws-source-5.15.0, linux-aws-tools, linux-headers-5.15.0-1081-aws
+Conflicts: linux-image-5.15.0-1082-aws
+Suggests: fdutils, linux-aws-doc-5.15.0 | linux-aws-source-5.15.0, linux-aws-tools, linux-headers-5.15.0-1082-aws
 Description: Linux kernel image for version 5.15.0 on 64 bit x86 SMP
  This package contains the unsigned Linux kernel image for version 5.15.0 on
  64 bit x86 SMP.
@@ -126,12 +126,12 @@ Description: Linux kernel image for version 5.15.0 on 64 bit x86 SMP
  the linux-aws meta-package, which will ensure that upgrades work
  correctly, and that supporting packages are also installed.
 
-Package: linux-modules-5.15.0-1081-aws
+Package: linux-modules-5.15.0-1082-aws
 Build-Profiles: <!stage1>
 Architecture: amd64 arm64
 Section: kernel
 Priority: optional
-Depends: ${misc:Depends}, ${shlibs:Depends}, linux-image-5.15.0-1081-aws | linux-image-unsigned-5.15.0-1081-aws
+Depends: ${misc:Depends}, ${shlibs:Depends}, linux-image-5.15.0-1082-aws | linux-image-unsigned-5.15.0-1082-aws
 Built-Using: ${linux:BuiltUsing}
 Description: Linux kernel extra modules for version 5.15.0 on 64 bit x86 SMP
  Contains the corresponding System.map file, the modules built by the
@@ -146,12 +146,12 @@ Description: Linux kernel extra modules for version 5.15.0 on 64 bit x86 SMP
  the linux-aws meta-package, which will ensure that upgrades work
  correctly, and that supporting packages are also installed.
 
-Package: linux-modules-extra-5.15.0-1081-aws
+Package: linux-modules-extra-5.15.0-1082-aws
 Build-Profiles: <!stage1>
 Architecture: amd64 arm64
 Section: kernel
 Priority: optional
-Depends: ${misc:Depends}, ${shlibs:Depends}, linux-image-5.15.0-1081-aws | linux-image-unsigned-5.15.0-1081-aws, wireless-regdb
+Depends: ${misc:Depends}, ${shlibs:Depends}, linux-image-5.15.0-1082-aws | linux-image-unsigned-5.15.0-1082-aws, wireless-regdb
 Description: Linux kernel extra modules for version 5.15.0 on 64 bit x86 SMP
  This package contains the Linux kernel extra modules for version 5.15.0 on
  64 bit x86 SMP.
@@ -164,21 +164,21 @@ Description: Linux kernel extra modules for version 5.15.0 on 64 bit x86 SMP
  the linux-modules-extra-aws meta-package, which will ensure that upgrades
  work correctly, and that supporting packages are also installed.
 
-Package: linux-headers-5.15.0-1081-aws
+Package: linux-headers-5.15.0-1082-aws
 Build-Profiles: <!stage1>
 Architecture: amd64 arm64
 Section: devel
 Priority: optional
-Depends: ${misc:Depends}, linux-aws-headers-5.15.0-1081, ${shlibs:Depends}
+Depends: ${misc:Depends}, linux-aws-headers-5.15.0-1082, ${shlibs:Depends}
 Provides: linux-headers, linux-headers-3.0
 Description: Linux kernel headers for version 5.15.0 on 64 bit x86 SMP
  This package provides kernel header files for version 5.15.0 on
  64 bit x86 SMP.
  .
  This is for sites that want the latest kernel headers.  Please read
- /usr/share/doc/linux-headers-5.15.0-1081/debian.README.gz for details.
+ /usr/share/doc/linux-headers-5.15.0-1082/debian.README.gz for details.
 
-Package: linux-image-unsigned-5.15.0-1081-aws-dbgsym
+Package: linux-image-unsigned-5.15.0-1082-aws-dbgsym
 Build-Profiles: <!stage1>
 Architecture: amd64 arm64
 Section: devel
@@ -195,27 +195,27 @@ Description: Linux kernel debug image for version 5.15.0 on 64 bit x86 SMP
  is uncompressed, and unstripped. This package also includes the
  unstripped modules.
 
-Package: linux-tools-5.15.0-1081-aws
+Package: linux-tools-5.15.0-1082-aws
 Build-Profiles: <!stage1>
 Architecture: amd64 arm64
 Section: devel
 Priority: optional
-Depends: ${misc:Depends}, linux-aws-tools-5.15.0-1081
-Description: Linux kernel version specific tools for version 5.15.0-1081
+Depends: ${misc:Depends}, linux-aws-tools-5.15.0-1082
+Description: Linux kernel version specific tools for version 5.15.0-1082
  This package provides the architecture dependant parts for kernel
  version locked tools (such as perf and x86_energy_perf_policy) for
- version 5.15.0-1081 on
+ version 5.15.0-1082 on
  64 bit x86.
 
-Package: linux-cloud-tools-5.15.0-1081-aws
+Package: linux-cloud-tools-5.15.0-1082-aws
 Build-Profiles: <!stage1>
 Architecture: amd64 arm64
 Section: devel
 Priority: optional
-Depends: ${misc:Depends}, linux-aws-cloud-tools-5.15.0-1081
-Description: Linux kernel version specific cloud tools for version 5.15.0-1081
+Depends: ${misc:Depends}, linux-aws-cloud-tools-5.15.0-1082
+Description: Linux kernel version specific cloud tools for version 5.15.0-1082
  This package provides the architecture dependant parts for kernel
- version locked tools for cloud for version 5.15.0-1081 on
+ version locked tools for cloud for version 5.15.0-1082 on
  64 bit x86.
 
 Package: linux-udebs-aws
@@ -229,7 +229,7 @@ Description: Metapackage depending on kernel udebs
  for easier version and migration tracking.
 
 
-Package: linux-buildinfo-5.15.0-1081-aws
+Package: linux-buildinfo-5.15.0-1082-aws
 Build-Profiles: <!stage1>
 Architecture: amd64 arm64
 Section: kernel
