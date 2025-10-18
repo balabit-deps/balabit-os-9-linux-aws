@@ -1,3 +1,9 @@
+linux-aws (5.15.0-1095.102bb1) jammy; urgency=medium
+
+  * Balabit patched version
+
+ -- Balabit Platform Team <devnull@dev.null>  Sat, 18 Oct 2025 08:24:25 +0000
+
 linux-aws (5.15.0-1095.102) jammy; urgency=medium
 
   * jammy/linux-aws: 5.15.0-1095.102 -proposed tracker (LP: #2126492)
