@@ -1,3 +1,17 @@
+linux-aws (5.15.0-1101.108) jammy; urgency=medium
+
+  * jammy/linux-aws: 5.15.0-1101.108 -proposed tracker (LP: #2140850)
+
+  [ Ubuntu: 5.15.0-171.181 ]
+
+  * jammy/linux: 5.15.0-171.181 -proposed tracker (LP: #2140905)
+  * CVE-2022-49267
+    - mmc: core: use sysfs_emit() instead of sprintf()
+  * CVE-2025-21780
+    - drm/amdgpu: avoid buffer overflow attach in smu_sys_set_pp_table()
+
+ -- Gabriela Bittencourt <gabriela.bittencourt@canonical.com>  Thu, 12 Feb 2026 00:32:49 -0300
+
 linux-aws (5.15.0-1100.107) jammy; urgency=medium
 
   * jammy/linux-aws: 5.15.0-1100.107 -proposed tracker (LP: #2137769)
