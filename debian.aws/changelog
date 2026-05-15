@@ -1,3 +1,9 @@
+linux-aws (5.15.0-1108.115bb2) jammy; urgency=medium
+
+  * Balabit patched version
+
+ -- Balabit Platform Team <devnull@dev.null>  Fri, 15 May 2026 16:23:45 +0200
+
 linux-aws (5.15.0-1108.115bb1) jammy; urgency=medium
 
   * Balabit patched version
